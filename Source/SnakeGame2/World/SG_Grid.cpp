@@ -46,6 +46,12 @@ void ASG_Grid::SetModel(const TSharedPtr<Snake::Grid>& Grid, uint32 InCellSize)
 	check(Size.Y);
 	GridMesh->SetRelativeScale3D(FVector(WorldHeight / Size.X, WorldWidth / Size.Y, 1.0f));
 	GridMesh->SetRelativeLocation(0.5f * FVector(WorldHeight, WorldWidth, -Size.Z));
+
+	GridMaterial = GridMesh->CreateAndSetMaterialInstanceDynamic(0);
+	if (GridMaterial)
+	{
+		GridMaterial->SetVectorParameterValue("Division", FVector(GridDim.height, GridDim.width, 0.0f));
+	}
 }
 
 void ASG_Grid::Tick(float DeltaTime)

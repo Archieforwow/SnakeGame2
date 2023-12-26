@@ -35,6 +35,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY()
+	UMaterialInstanceDynamic* GridMaterial;
 
 	Snake::Dim GridDim;
 	uint32 CellSize;
