@@ -15,8 +15,8 @@ void ASG_GameMode::StartPlay()
 {
 	Super::StartPlay();
 
-	const Snake::Settings GS{ GridSize.X, GridSize.Y };
-	Game = MakeUnique<Snake::Game>(GS);
+	const SnakeGame::Settings GS{ GridSize.X, GridSize.Y };
+	Game = MakeUnique<SnakeGame::Game>(GS);
 	check(Game.IsValid());
 
 	const FTransform GridOrigin = FTransform::Identity;
