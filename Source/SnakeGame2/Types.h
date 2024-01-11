@@ -3,26 +3,73 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Containers/List.h"
 
 namespace SnakeGame
 {
 
 	struct Dim
 	{
-		uint32 width;
-		uint32 height;
+		int32 width;
+		int32 height;
+	};
+
+	struct Position
+	{
+		Position(int32 inX, int32 inY) : x(inX), y(inY) {}
+		int32 x;
+		int32 y;
+
+		FORCEINLINE Position& operator+=(const Position& rhs)
+		{
+			x += rhs.x;
+			y += rhs.y;
+			return *this;
+		}
+	};
+
+	struct Input
+	{
+		int8 x;
+		int8 y;
+
+		FORCEINLINE bool opposite(const Input& rhs) const
+		{
+			return (x == -rhs.x && x != 0) || (y == -rhs.y && y != 0);
+		}
 	};
 
 	enum class CellType
 	{
 		Empty = 0,
 		Wall,
+		Snake,
 		//Food
-		//Snake
 	};
 
 	struct Settings
 	{
-		Dim gridSize;
+		Dim GridSize{40,10};
+
+		struct Snake
+		{
+			int32 defaultSize{ 4 };
+			Position startPosition{ 0,0 };
+		} snake;
+		float gameSpeed{ 1.0f };
 	};
+
+	using TPositionPtr = TDoubleLinkedList<Position>::TDoubleLinkedListNode;
+
+	class TSnakeList : public TDoubleLinkedList<Position>
+	{
+	public:
+		void MoveTail(TPositionPtr* Tail, TPositionPtr* Head, const Position& Pos)
+		{
+			RemoveNode(Tail);
+			InsertNode(Pos, Head->GetNextNode());
+		}
+	};
+
+
 }

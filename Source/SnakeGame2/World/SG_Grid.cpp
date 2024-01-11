@@ -27,17 +27,18 @@ void ASG_Grid::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ASG_Grid::SetModel(const TSharedPtr<SnakeGame::Grid>& Grid, uint32 InCellSize)
+void ASG_Grid::SetModel(const TSharedPtr<SnakeGame::Grid>& Grid, int32 InCellSize)
 {
-	if (!Grid.IsValid())
+	if (!Grid)
 	{
 		UE_LOG(LogWorldGrid, Fatal, TEXT("Grid is null, game aborted!"));
 	}
-	GridDim = Grid.Get()->dim();
+	GridDim = Grid->dim();
 	CellSize = InCellSize;
 	WorldWidth = GridDim.width * CellSize;
 	WorldHeight = GridDim.height * CellSize;
 
+	//scale mesh
 	check(GridMesh->GetStaticMesh());
 	const FBox Box = GridMesh->GetStaticMesh()->GetBoundingBox();
 	const auto Size = Box.GetSize();
@@ -72,7 +73,7 @@ void ASG_Grid::Tick(float DeltaTime)
 
 void ASG_Grid::DrawGrid()
 {
-	for (uint32 i = 0; i < GridDim.height + 1; ++i)
+	for (int32 i = 0; i < GridDim.height + 1; ++i)
 	{
 		if (!GetWorld() || !GetWorld()->LineBatcher) return;
 
@@ -81,7 +82,7 @@ void ASG_Grid::DrawGrid()
 		GetWorld()->LineBatcher->DrawLine(StartLocation, StartLocation + GetActorRightVector() * WorldWidth, FLinearColor::Red, 0, 2.0f);
 	}
 
-	for (uint32 i = 0; i < GridDim.width + 1; ++i)
+	for (int32 i = 0; i < GridDim.width + 1; ++i)
 	{
 		const FVector StartLocation = GetActorLocation() + GetActorRightVector() * CellSize * i;
 		//DrawDebugLine(GetWorld(), StartLocation, StartLocation + GetActorForwardVector() * WorldHeight, FColor::Red, false, -1.0f, 0, 2.0f);

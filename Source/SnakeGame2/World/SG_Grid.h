@@ -24,7 +24,7 @@ public:
 	ASG_Grid();
 	virtual void Tick(float DeltaTime) override;
 
-	void SetModel(const TSharedPtr<SnakeGame::Grid>& Grid, uint32 CellSize);
+	void SetModel(const TSharedPtr<SnakeGame::Grid>& Grid, int32 CellSize);
 
 	void UpdateColors(const FSnakeColors& Colors);
 
@@ -42,9 +42,9 @@ private:
 	UMaterialInstanceDynamic* GridMaterial;
 
 	SnakeGame::Dim GridDim;
-	uint32 CellSize;
-	uint32 WorldWidth;
-	uint32 WorldHeight;
+	int32 CellSize;
+	int32 WorldWidth;
+	int32 WorldHeight;
 
 	void DrawGrid();
 };
