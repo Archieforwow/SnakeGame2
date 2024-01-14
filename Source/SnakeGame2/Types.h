@@ -17,6 +17,7 @@ namespace SnakeGame
 	struct Position
 	{
 		Position(int32 inX, int32 inY) : x(inX), y(inY) {}
+		Position(const Position& position = Position::Zero) : x(position.x), y(position.y) {}
 		int32 x;
 		int32 y;
 
@@ -26,6 +27,8 @@ namespace SnakeGame
 			y += rhs.y;
 			return *this;
 		}
+
+		static Position Zero;
 	};
 
 	struct Input
@@ -37,6 +40,8 @@ namespace SnakeGame
 		{
 			return (x == -rhs.x && x != 0) || (y == -rhs.y && y != 0);
 		}
+
+		static Input Default;
 	};
 
 	enum class CellType
@@ -44,7 +49,7 @@ namespace SnakeGame
 		Empty = 0,
 		Wall,
 		Snake,
-		//Food
+		Food
 	};
 
 	struct Settings
@@ -54,7 +59,7 @@ namespace SnakeGame
 		struct Snake
 		{
 			int32 defaultSize{ 4 };
-			Position startPosition{ 0,0 };
+			Position startPosition{Position::Zero};
 		} snake;
 		float gameSpeed{ 1.0f };
 	};

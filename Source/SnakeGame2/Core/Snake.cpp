@@ -26,3 +26,8 @@ void SnakeGame::Snake::move(const Input& input)
 	m_links.GetHead()->GetValue() += Position(m_lastInput.x, m_lastInput.y);
 }
 
+void SnakeGame::Snake::increase()
+{
+	m_links.AddTail(m_links.GetTail()->GetValue());
+}
+

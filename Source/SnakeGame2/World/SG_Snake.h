@@ -23,13 +23,11 @@ public:
 	void UpdateColors(const FSnakeColors& Colors);
 
 protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<ASG_SnakeLink> SnakeHeadClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<AActor> SnakeHeadClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<AActor> SnakeLinkClass;
+	TSubclassOf<ASG_SnakeLink> SnakeLinkClass;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
@@ -38,6 +36,7 @@ private:
 	TWeakPtr<SnakeGame::Snake> Snake;
 	int32 CellSize;
 	SnakeGame::Dim Dims;
+
 	FLinearColor SnakeLinkColor;
 
 	UPROPERTY()
