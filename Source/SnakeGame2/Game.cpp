@@ -21,7 +21,7 @@ Game::Game(const Settings& settings): c_settings(settings)
 	generateFood();
 }
 
-void SnakeGame::Game::update(float deltaSeconds, const Input& input)
+void Game::update(float deltaSeconds, const Input& input)
 {
 	if (m_gameOver || !updateTime(deltaSeconds)) return;
 
@@ -30,8 +30,7 @@ void SnakeGame::Game::update(float deltaSeconds, const Input& input)
 	if (died())
 	{
 		m_gameOver = true;
-		UE_LOG(LogGame, Display, TEXT("___________________ GAME OVER ___________________"));
-		UE_LOG(LogGame, Display, TEXT("___________________ SCORE: %i ___________________"), m_score);
+		m_gameplayEventCallback(GameplayEvent::GameOver);
 		return;
 	}
 
@@ -39,6 +38,7 @@ void SnakeGame::Game::update(float deltaSeconds, const Input& input)
 	{
 		++m_score;
 		m_snake->increase();
+		m_gameplayEventCallback(GameplayEvent::FoodTaken);
 		generateFood();
 	}
 }
@@ -49,7 +49,7 @@ void Game::move(const Input& input)
 	updateGrid();
 }
 
-void SnakeGame::Game::generateFood()
+void Game::generateFood()
 {
 	Position foodPosition;
 	if (m_grid->randomEmptyPosition(foodPosition))
@@ -61,8 +61,8 @@ void SnakeGame::Game::generateFood()
 	else
 	{
 		m_gameOver = true;
-		UE_LOG(LogGame, Display, TEXT("___________________ GAME COMPLETED ___________________"));
-		UE_LOG(LogGame, Display, TEXT("___________________ SCORE: %i ___________________"), m_score);
+		m_gameplayEventCallback(GameplayEvent::GameCompleted);
+
 	}
 
 }
@@ -75,7 +75,7 @@ bool Game::foodTaken() const
 void Game::updateGrid()
 {
 	m_grid->update(m_snake->body(), CellType::Snake);
-	m_grid->printDebug();
+	//m_grid->printDebug();
 }
 
 bool Game::updateTime(float deltaSeconds)
@@ -87,9 +87,14 @@ bool Game::updateTime(float deltaSeconds)
 	return true;
 }
 
-bool SnakeGame::Game::died() const
+bool Game::died() const
 {
 	return m_grid->hitTest(m_snake->head(), CellType::Wall) || //
 		m_grid->hitTest(m_snake->head(), CellType::Snake);
+}
+
+void Game::subscribeOnGameplayEvent(GameplayEventCallback callback)
+{
+	m_gameplayEventCallback = callback;
 }
 

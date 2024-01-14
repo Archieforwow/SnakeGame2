@@ -23,6 +23,10 @@ namespace SnakeGame
 
 		void update(float deltaSeconds, const Input& input);
 
+		uint32 score() const { return m_score; }
+
+		void subscribeOnGameplayEvent(GameplayEventCallback callback);
+
 	private:
 		const Settings c_settings;
 		TSharedPtr<Grid> m_grid;
@@ -32,6 +36,8 @@ namespace SnakeGame
 		float m_moveSeconds{0.0f};
 		bool m_gameOver{false};
 		uint32 m_score{0};
+
+		GameplayEventCallback m_gameplayEventCallback;
 
 		void move(const Input& input);
 		void updateGrid();

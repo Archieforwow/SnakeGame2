@@ -11,7 +11,7 @@ Grid::Grid(const Dim& dim): c_dim(Dim{dim.width +2, dim.height +2})
 {
 	m_cells.Init(CellType::Empty, c_dim.width * c_dim.height);
 	initWalls();
-	printDebug();
+	//printDebug();
 
 }
 
@@ -76,7 +76,6 @@ void SnakeGame::Grid::updateInternal(const Position& position, CellType cellType
 	const auto index = posToIndex(position);
 	m_cells[index] = cellType;
 	m_indByType[cellType].Add(index);
-
 }
 
 void Grid::freeCellsByType(CellType cellType)

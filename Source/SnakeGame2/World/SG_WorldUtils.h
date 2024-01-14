@@ -21,7 +21,7 @@ namespace SnakeGame
 				const FBox Box = Mesh->GetStaticMesh()->GetBoundingBox();
 				const auto Size = Box.GetSize();
 
-				check(Size.IsZero());
+				check(!Size.IsZero());
 				Mesh->SetRelativeScale3D(FVector(WorldSize / Size));
 			}
 		

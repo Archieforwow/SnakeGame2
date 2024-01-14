@@ -28,7 +28,7 @@ namespace SnakeGame
 			return *this;
 		}
 
-		static Position Zero;
+		static const Position Zero;
 	};
 
 	struct Input
@@ -41,7 +41,7 @@ namespace SnakeGame
 			return (x == -rhs.x && x != 0) || (y == -rhs.y && y != 0);
 		}
 
-		static Input Default;
+		static const Input Default;
 	};
 
 	enum class CellType
@@ -76,5 +76,12 @@ namespace SnakeGame
 		}
 	};
 
+	enum class GameplayEvent
+	{
+		GameOver = 0,
+		GameCompleted,
+		FoodTaken
+	};
 
+	using GameplayEventCallback = TFunction<void(GameplayEvent)>;
 }

@@ -91,6 +91,6 @@ private:
 	void OnMoveRight(const FInputActionValue& Value);
 	void OnGameReset(const FInputActionValue& Value);
 
-	
+	void SubscribeOnGameEvents();
 
 };
