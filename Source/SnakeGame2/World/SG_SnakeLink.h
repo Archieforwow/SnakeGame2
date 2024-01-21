@@ -22,7 +22,6 @@ public:
 	void Explode();
 
 protected:
-
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Origin;
 
@@ -32,4 +31,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem* ExplosionEffect;
 
+private:
+	FLinearColor LinkColor;
 };

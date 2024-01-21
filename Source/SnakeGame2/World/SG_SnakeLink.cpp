@@ -5,6 +5,7 @@
 #include "Components\StaticMeshComponent.h"
 #include "SG_WorldUtils.h"
 #include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 ASG_SnakeLink::ASG_SnakeLink()
 {
@@ -21,6 +22,7 @@ ASG_SnakeLink::ASG_SnakeLink()
 
 void ASG_SnakeLink::UpdateColor(const FLinearColor& Color)
 {
+	LinkColor = Color;
 	if (auto* LinkMaterial = LinkMesh->CreateAndSetMaterialInstanceDynamic(0))
 	{
 		LinkMaterial->SetVectorParameterValue("Color", Color);
@@ -34,7 +36,10 @@ void ASG_SnakeLink::UpdateScale(int32 CellSize)
 
 void ASG_SnakeLink::Explode()
 {
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionEffect, GetActorLocation());
+	if (UNiagaraComponent* NS = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionEffect, GetActorLocation()))
+	{
+		NS->SetNiagaraVariableLinearColor("LinkColor", LinkColor);
+	}
 	SetActorHiddenInGame(true);
 }
 
