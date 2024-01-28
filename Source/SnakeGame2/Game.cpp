@@ -30,7 +30,7 @@ void Game::update(float deltaSeconds, const Input& input)
 	if (died())
 	{
 		m_gameOver = true;
-		m_gameplayEventCallback(GameplayEvent::GameOver);
+		dispatchEvent(GameplayEvent::GameOver);
 		return;
 	}
 
@@ -38,7 +38,7 @@ void Game::update(float deltaSeconds, const Input& input)
 	{
 		++m_score;
 		m_snake->increase();
-		m_gameplayEventCallback(GameplayEvent::FoodTaken);
+		dispatchEvent(GameplayEvent::FoodTaken);
 		generateFood();
 	}
 }
@@ -61,7 +61,7 @@ void Game::generateFood()
 	else
 	{
 		m_gameOver = true;
-		m_gameplayEventCallback(GameplayEvent::GameCompleted);
+		dispatchEvent(GameplayEvent::GameCompleted);
 
 	}
 
@@ -80,7 +80,7 @@ void Game::updateGrid()
 
 bool Game::updateTime(float deltaSeconds)
 {
-
+	m_gameTime += deltaSeconds;
 	m_moveSeconds += deltaSeconds;
 	if(m_moveSeconds < c_settings.gameSpeed) return false;
 	m_moveSeconds = 0.0f;
@@ -95,6 +95,17 @@ bool Game::died() const
 
 void Game::subscribeOnGameplayEvent(GameplayEventCallback callback)
 {
-	m_gameplayEventCallback = callback;
+	m_gameplayEventCallbacks.Add(callback);
+}
+
+void Game::dispatchEvent(GameplayEvent Event)
+{
+	for (const auto& callback : m_gameplayEventCallbacks)
+	{
+		if (callback)
+		{
+			callback(Event);
+		}
+	}
 }
 

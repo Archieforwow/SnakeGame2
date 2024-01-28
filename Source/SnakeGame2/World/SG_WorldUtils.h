@@ -3,6 +3,9 @@
 #include "CoreMinimal.h"
 #include "Types.h"
 #include "Components\StaticMeshComponent.h"
+#include "InputAction.h"
+#include "InputMappingContext.h"
+#include "EnhancedActionKeyMapping.h"
 
 namespace SnakeGame
 {
@@ -25,6 +28,29 @@ namespace SnakeGame
 				Mesh->SetRelativeScale3D(FVector(WorldSize / Size));
 			}
 		
+		}
+
+		static FText FormatSeconds(float TimeSeconds)
+		{
+			const int32 TotalSeconds = FMath::RoundToInt(TimeSeconds);
+			const int32 Minutes = TotalSeconds / 60;
+			const int32 Seconds = TotalSeconds % 60;
+			const FString FormattedTime = FString::Printf(TEXT("%02i:%02i"), Minutes, Seconds);
+			return FText::FromString(FormattedTime);
+		}
+
+		static FText FormatScore(uint32 Score)
+		{
+			const FString FormattedScore = FString::Printf(TEXT("%02i"), Score);
+			return FText::FromString(FormattedScore);
+		}
+
+		static FString FindActionKeyName(const UInputMappingContext* InputMapping, const UInputAction* Action)
+		{
+			auto* FoundAcionKeyMapping = InputMapping->GetMappings().FindByPredicate([&](const FEnhancedActionKeyMapping& Mapping)  //
+				{ return Mapping.Action == Action; });
+
+			return FoundAcionKeyMapping ? FoundAcionKeyMapping->Key.GetDisplayName().ToString() : FString{};
 		}
 	};
 }

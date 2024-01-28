@@ -15,6 +15,7 @@ class AExponentialHeightFog;
 class UInputAction;
 class UInputMappingContext;
 class ASG_Food;
+class ASG_HUD;
 
 UCLASS()
 class SNAKEGAME2_API ASG_GameMode : public AGameModeBase
@@ -76,7 +77,10 @@ private:
 	UPROPERTY()
 	AExponentialHeightFog* Fog;
 
-	TUniquePtr<SnakeGame::Game> Game;
+	UPROPERTY()
+	ASG_HUD* HUD;
+
+	TSharedPtr<SnakeGame::Game> Game;
 	int32 ColorTableIndex{0};
 	SnakeGame::Input SnakeInput{SnakeGame::Input::Default};
 

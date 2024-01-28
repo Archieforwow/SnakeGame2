@@ -25,6 +25,8 @@ namespace SnakeGame
 
 		uint32 score() const { return m_score; }
 
+		float gameTime() const { return m_gameTime; }
+
 		void subscribeOnGameplayEvent(GameplayEventCallback callback);
 
 	private:
@@ -36,8 +38,9 @@ namespace SnakeGame
 		float m_moveSeconds{0.0f};
 		bool m_gameOver{false};
 		uint32 m_score{0};
+		float m_gameTime{0.0f};
 
-		GameplayEventCallback m_gameplayEventCallback;
+		TArray<GameplayEventCallback> m_gameplayEventCallbacks;
 
 		void move(const Input& input);
 		void updateGrid();
@@ -45,6 +48,8 @@ namespace SnakeGame
 		bool died() const;
 		void generateFood();
 		bool foodTaken() const;
+
+		FORCEINLINE void dispatchEvent(GameplayEvent Event);
 	};
 
 
