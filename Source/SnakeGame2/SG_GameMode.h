@@ -16,6 +16,7 @@ class UInputAction;
 class UInputMappingContext;
 class ASG_Food;
 class ASG_HUD;
+class ASG_Obstacle;
 
 UCLASS()
 class SNAKEGAME2_API ASG_GameMode : public AGameModeBase
@@ -50,6 +51,9 @@ protected:
 	TSubclassOf<ASG_Food> FoodVisualClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Design")
+	TSubclassOf<ASG_Obstacle> ObstacleVisualClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Design")
 	UDataTable* ColorsTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SnakeInput")
@@ -73,6 +77,9 @@ private:
 
 	UPROPERTY()
 	ASG_Food* FoodVisual;
+
+	UPROPERTY()
+	ASG_Obstacle* ObstacleVisual;
 
 	UPROPERTY()
 	AExponentialHeightFog* Fog;

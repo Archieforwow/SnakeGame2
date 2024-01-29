@@ -5,6 +5,7 @@
 #include "Grid.h"
 #include "Core/Snake.h"
 #include "Core/Food.h"
+#include "Core/Obstacle.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGame, All, All);
 
@@ -17,8 +18,10 @@ Game::Game(const Settings& settings): c_settings(settings)
 		settings.snake.defaultSize, m_grid->dim().width);
 	m_snake = MakeShared<Snake>(settings.snake);
 	m_food = MakeShared<Food>();
+	m_obstacle = MakeShared<Obstacle>();
 	updateGrid();
 	generateFood();
+	generateObstacle();
 }
 
 void Game::update(float deltaSeconds, const Input& input)
@@ -40,6 +43,14 @@ void Game::update(float deltaSeconds, const Input& input)
 		m_snake->increase();
 		dispatchEvent(GameplayEvent::FoodTaken);
 		generateFood();
+		generateObstacle();
+	}
+
+	if (obstacleHit())
+	{
+		m_gameOver = true;
+		dispatchEvent(GameplayEvent::GameOver);
+		return;
 	}
 }
 
@@ -67,9 +78,31 @@ void Game::generateFood()
 
 }
 
+void Game::generateObstacle()
+{
+	Position obstaclePosition;
+	if (m_grid->randomEmptyPosition(obstaclePosition))
+	{
+		m_obstacle->setPosition(obstaclePosition);
+		m_grid->update(m_obstacle->position(), CellType::Obstacle);
+	}
+
+	else
+	{
+		m_gameOver = true;
+		dispatchEvent(GameplayEvent::GameOver);
+
+	}
+}
+
 bool Game::foodTaken() const
 {
 	return m_grid->hitTest(m_snake->head(), CellType::Food);
+}
+
+bool Game::obstacleHit() const
+{
+	return m_grid->hitTest(m_snake->head(), CellType::Obstacle);
 }
 
 void Game::updateGrid()
@@ -90,7 +123,8 @@ bool Game::updateTime(float deltaSeconds)
 bool Game::died() const
 {
 	return m_grid->hitTest(m_snake->head(), CellType::Wall) || //
-		m_grid->hitTest(m_snake->head(), CellType::Snake);
+		m_grid->hitTest(m_snake->head(), CellType::Snake) || //
+		m_grid->hitTest(m_snake->head(), CellType::Obstacle);
 }
 
 void Game::subscribeOnGameplayEvent(GameplayEventCallback callback)

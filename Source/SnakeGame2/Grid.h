@@ -30,6 +30,7 @@ namespace SnakeGame
 			{CellType::Snake, {}},
 			{CellType::Wall, {}},
 			{CellType::Food, {}},
+			{CellType::Obstacle, {}},
 		};
 
 		void initWalls();

@@ -11,7 +11,7 @@ Grid::Grid(const Dim& dim): c_dim(Dim{dim.width +2, dim.height +2})
 {
 	m_cells.Init(CellType::Empty, c_dim.width * c_dim.height);
 	initWalls();
-	//printDebug();
+	printDebug();
 
 }
 
@@ -46,6 +46,7 @@ void Grid::printDebug()
 				case CellType::Wall: symbol = '*'; break;
 				case CellType::Snake: symbol = '_'; break;
 				case CellType::Food: symbol = 'F'; break;
+				case CellType::Obstacle: symbol = 'X'; break;
 			}
 			line.AppendChar(symbol).AppendChar(' ');
 		}

@@ -32,4 +32,7 @@ struct FSnakeColors : public FTableRowBase
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FLinearColor FoodColor;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FLinearColor ObstacleColor;
+
 };

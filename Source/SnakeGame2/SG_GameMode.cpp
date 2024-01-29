@@ -6,6 +6,7 @@
 #include "World\SG_Grid.h"
 #include "World\SG_Snake.h"
 #include "World\SG_Food.h"
+#include "World\SG_Obstacle.h"
 #include "World\SG_WorldTypes.h"
 #include "SG_Pawn.h"
 #include "Grid.h"
@@ -50,6 +51,11 @@ void ASG_GameMode::StartPlay()
 	FoodVisual = GetWorld()->SpawnActorDeferred<ASG_Food>(FoodVisualClass, GridOrigin);
 	FoodVisual->SetModel(Game->food(), CellSize, Game->grid()->dim());
 	FoodVisual->FinishSpawning(GridOrigin);
+
+	// init world obstacle
+	ObstacleVisual = GetWorld()->SpawnActorDeferred<ASG_Obstacle>(ObstacleVisualClass, GridOrigin);
+	ObstacleVisual->SetModel(Game->obstacle(), CellSize, Game->grid()->dim());
+	ObstacleVisual->FinishSpawning(GridOrigin);
 
 	// set pawn location fitting grid in viewport
 	auto* PC = GetWorld()->GetFirstPlayerController();
@@ -98,6 +104,7 @@ void ASG_GameMode::UpdateColors()
 		GridVisual->UpdateColors(*ColorSet);
 		SnakeVisual->UpdateColors(*ColorSet);
 		FoodVisual->UpdateColors(ColorSet->FoodColor);
+		ObstacleVisual->UpdateColors(ColorSet->ObstacleColor);
 
 		//update scene ambient color via fog
 		if (Fog && Fog->GetComponent())
@@ -151,6 +158,7 @@ void ASG_GameMode::OnGameReset(const FInputActionValue& Value)
 		GridVisual->SetModel(Game->grid(), CellSize);
 		SnakeVisual->SetModel(Game->snake(), CellSize, Game->grid()->dim());
 		FoodVisual->SetModel(Game->food(), CellSize, Game->grid()->dim());
+		ObstacleVisual->SetModel(Game->obstacle(), CellSize, Game->grid()->dim());
 		HUD->SetModel(Game);
 		SnakeInput = SnakeGame::Input::Default;
 		UpdateColors();
@@ -190,6 +198,7 @@ void ASG_GameMode::SubscribeOnGameEvents()
 				UE_LOG(LogSnakeGameMode, Display, TEXT("-------------- SCORE: %i --------------"), Game->score());
 				SnakeVisual->Explode();
 				FoodVisual->Hide();
+				ObstacleVisual->Hide();
 				break;
 			case GameplayEvent::GameCompleted:
 				UE_LOG(LogSnakeGameMode, Display, TEXT("-------------- GAME COMPLETED --------------"));
