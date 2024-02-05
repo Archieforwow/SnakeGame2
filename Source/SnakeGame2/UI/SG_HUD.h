@@ -60,7 +60,7 @@ private:
 
 	TWeakPtr<SnakeGame::Game> Game;
 
-	EUIGameState MatchState;
+	EUIGameState GameState;
 
-	void SetUIMatchState(EUIGameState MatchState);
+	void SetUIGameState(EUIGameState GameState);
 };

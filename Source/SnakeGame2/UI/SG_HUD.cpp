@@ -38,9 +38,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 
 	Game = InGame;
 
-	SetUIMatchState(EUIGameState::GameInProgress);
-	GameplayWidget->SetScore(InGame->score());
-	GameOverWidget->SetScore(InGame->score());
+	SetUIGameState(EUIGameState::GameInProgress);
 
 	InGame->subscribeOnGameplayEvent(
 		[&](GameplayEvent Event)
@@ -54,7 +52,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 			case GameplayEvent::GameCompleted: [[fallthrough]];
 			case GameplayEvent::GameOver: //
 				GameOverWidget->SetScore(InGame->score());
-				SetUIMatchState(EUIGameState::GameOver);
+				SetUIGameState(EUIGameState::GameOver);
 				break;
 			}
 		});
@@ -70,26 +68,32 @@ void ASG_HUD::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (Game.IsValid() && MatchState == EUIGameState::GameInProgress)
+	if (Game.IsValid() && GameState == EUIGameState::GameInProgress)
 	{
 		GameplayWidget->SetGameTime(Game.Pin()->gameTime());
 	}
 }
 
-void ASG_HUD::SetUIMatchState(EUIGameState InMatchState)
+void ASG_HUD::SetUIGameState(EUIGameState InGameState)
 {
 	if (CurrentWidget)
 	{
 		CurrentWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
-	if (GameWidgets.Contains(InMatchState))
+	if (GameWidgets.Contains(InGameState))
 	{
-		CurrentWidget = GameWidgets[InMatchState];
+		CurrentWidget = GameWidgets[InGameState];
 		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
 	}
 
-	MatchState = InMatchState;
+	if (InGameState == EUIGameState::GameInProgress && Game.IsValid())
+	{
+		GameplayWidget->SetScore(Game.Pin()->score());
+		GameOverWidget->SetScore(Game.Pin()->score());
+	}
+
+	GameState = InGameState;
 }
 
 

@@ -7,6 +7,7 @@
 #include "SG_GameOverWidget.generated.h"
 
 class UTextBlock;
+class UButton;
 
 UCLASS()
 class USG_GameOverWidget : public UUserWidget
@@ -23,4 +24,16 @@ protected:
 	
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ResetGameText;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* BackToMenuButton;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSoftObjectPtr<UWorld> MenuLevel;
+
+	virtual void NativeOnInitialized() override;
+
+private:
+	UFUNCTION()
+	void OnBackToMenu();
 };
